@@ -118,3 +118,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+@theme {
+    --font-monserrat:"Montserrat Alternates", sans-serif;
+}
