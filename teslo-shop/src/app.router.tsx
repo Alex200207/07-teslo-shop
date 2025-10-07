@@ -3,13 +3,15 @@ import ShopLayout from "./shop/layout/ShopLayout";
 import HomePage from "./pages/home/HomePage";
 import ProductPage from "./pages/product/ProductPage";
 import GenderPage from "./pages/gender/GenderPage";
-import AuthLayout from "./auth/layout/AuthLayout";
 import LoginPage from "./auth/pages/LoginPage";
 import RegisterPage from "./auth/register/RegisterPage";
-import AdminLayout from "./admin/layout/AdminLayout";
 import DashboardPage from "./admin/pages/DashboardPage";
 import AdminProductsPage from "./admin/products/AdminProductsPage";
 import AdminProductPage from "./admin/product/AdminProductPage";
+import { lazy } from "react";
+
+const AuthLayout = lazy(() => import("./auth/layout/AuthLayout"));
+const AdminLayout = lazy(() => import("./admin/layout/AdminLayout"));
 
 export const appRouter = createBrowserRouter([
   // public
