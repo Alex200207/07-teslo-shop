@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,12 +5,9 @@ import { Label } from "@/components/ui/label";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { Link } from "react-router";
 
-export const LoginPage = ({
-  className,
-  ...props
-}: React.ComponentProps<"div">) => {
+export const LoginPage = () => {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={"flex flex-col gap-6"}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8">
@@ -83,7 +79,7 @@ export const LoginPage = ({
               <div className="text-center text-sm">
                 Don&apos;t have an account?{" "}
                 <Link
-                  to={"auth/register"}
+                  to={"/auth/register"}
                   className="underline underline-offset-4"
                 >
                   Sign up
