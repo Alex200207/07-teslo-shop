@@ -3,7 +3,7 @@ import ShopLayout from "./shop/layout/ShopLayout";
 import HomePage from "./pages/home/HomePage";
 import ProductPage from "./pages/product/ProductPage";
 import GenderPage from "./pages/gender/GenderPage";
-import LoginPage from "./auth/pages/LoginPage";
+import {LoginPage} from "./auth/pages/LoginPage";
 import RegisterPage from "./auth/register/RegisterPage";
 import DashboardPage from "./admin/pages/DashboardPage";
 import AdminProductsPage from "./admin/products/AdminProductsPage";
