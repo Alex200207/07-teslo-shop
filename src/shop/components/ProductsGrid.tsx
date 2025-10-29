@@ -13,7 +13,15 @@ const ProductsGrid = ({ products }: Props) => {
   //uso de searchParams
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const viewMode = searchParams.get("viewMode");
+  //viewmode
+  const viewMode = searchParams.get("viewMode") || "grid";
+
+  //funcion para cambiar el viewMode
+  const handleViewModeChange = (mode: "grid" | "list") => {
+    searchParams.set("viewMode", mode);
+    //setiamos la url del navegador con los parametros y disparamos re renderizcion
+    setSearchParams(searchParams);
+  };
 
   return (
     <section className="py-12 px-4 lg:px-8">
@@ -39,17 +47,17 @@ const ProductsGrid = ({ products }: Props) => {
 
             <div className="hidden md:flex border rounded-md">
               <Button
-                // variant={viewMode === "grid" ? "default" : "ghost"}
+                variant={viewMode === "grid" ? "default" : "ghost"}
                 size="sm"
-                // onClick={() => setViewMode("grid")}
+                onClick={() => handleViewModeChange("grid")}
                 className="rounded-r-none"
               >
                 <Grid className="h-4 w-4" />
               </Button>
               <Button
-                // variant={viewMode === "list" ? "default" : "ghost"}
+                variant={viewMode === "list" ? "default" : "ghost"}
                 size="sm"
-                // onClick={() => setViewMode("list")}
+                onClick={() => handleViewModeChange("list")}
                 className="rounded-l-none"
               >
                 <List className="h-4 w-4" />
@@ -83,27 +91,27 @@ const ProductsGrid = ({ products }: Props) => {
 
           {/* Products Grid */}
           <div className="flex-1">
-            {/* <div
+            <div
               className={
                 viewMode === "grid"
                   ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                   : "space-y-4"
               }
-            > */}
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                id={product.id}
-                name={product.name}
-                price={product.price}
-                image={product.image}
-                category={product.category}
-              />
-            ))}
+            >
+              {products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  id={product.id}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image}
+                  category={product.category}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-      {/* </div> */}
     </section>
   );
 };
