@@ -1,11 +1,11 @@
-import { Search, Menu } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRef} from "react";
+import { useRef } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { cn } from "@/lib/utils";
+import CustomLogo from "@/components/custom/CustomLogo";
 const CustomHeader = () => {
-
   const [searchParams, setSearchParams] = useSearchParams();
   //saber en que ruta estamos
   //use params segmentos de rutas que vienen ibligatorios
@@ -34,15 +34,7 @@ const CustomHeader = () => {
     <header className="sticky top-0 z-50 w-full border-b backdrop-blur bg-slate-50">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
-            <h1 className="text-xl font-semibold tracking-tight">
-              TESLA STYLE
-            </h1>
-          </div>
-
+          <CustomLogo />
           <nav className="hidden md:flex items-center space-x-8">
             <Link
               to={"/"}
