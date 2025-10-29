@@ -4,6 +4,7 @@ import { Filter, Grid, List } from "lucide-react";
 import FilterSidebar from "./FilterSidebar";
 import ProductCard from "./ProductCard";
 import { useSearchParams } from "react-router";
+import { useState } from "react";
 
 interface Props {
   products: Product[];
@@ -12,6 +13,10 @@ interface Props {
 const ProductsGrid = ({ products }: Props) => {
   //uso de searchParams
   const [searchParams, setSearchParams] = useSearchParams();
+
+  //estado local para manejar los filtros
+
+  const [showFilters, setShowFilters] = useState(false);
 
   //viewmode
   const viewMode = searchParams.get("viewMode") || "grid";
@@ -38,7 +43,7 @@ const ProductsGrid = ({ products }: Props) => {
             <Button
               variant="outline"
               size="sm"
-              //   onClick={() => setShowFilters(!showFilters)}
+              onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden"
             >
               <Filter className="h-4 w-4 mr-2" />
@@ -73,7 +78,7 @@ const ProductsGrid = ({ products }: Props) => {
           </div>
 
           {/* Mobile Filters */}
-          {/* {showFilters && (
+          {showFilters && (
             <div className="fixed inset-0 z-50 bg-background p-4 lg:hidden">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold">Filtros</h3>
@@ -87,7 +92,7 @@ const ProductsGrid = ({ products }: Props) => {
               </div>
               <FilterSidebar />
             </div>
-          )} */}
+          )}
 
           {/* Products Grid */}
           <div className="flex-1">
