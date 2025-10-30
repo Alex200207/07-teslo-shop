@@ -10,6 +10,7 @@ import StatCard from "../components/StatCard";
 import Chart from "../components/Chart";
 import QuickActions from "../components/QuickActions";
 import ActivityFeed from "../components/ActivityFeed";
+import AdminTtile from "../components/AdminTtile";
 
 const stats = [
   {
@@ -62,15 +63,10 @@ const performanceData = [
 const DashboardPage = () => {
   return (
     <>
-      {/* Welcome Section */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
-          Welcome back, John! 👋
-        </h1>
-        <p className="text-gray-600">
-          Here's what's happening with your business today.
-        </p>
-      </div>
+      <AdminTtile
+        title={"Dashboard"}
+        subtitle={"Aqui puedes ver el estado de tu negocio"}
+      />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
