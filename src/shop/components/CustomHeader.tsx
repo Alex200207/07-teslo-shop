@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { useAuthStore } from "@/auth/store/auth.store";
 const CustomHeader = () => {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const [searchParams, setSearchParams] = useSearchParams();
   //saber en que ruta estamos
   //use params segmentos de rutas que vienen ibligatorios
@@ -110,7 +110,12 @@ const CustomHeader = () => {
                 </Button>
               </Link>
             ) : (
-              <Button variant={"outline"} size={"sm"} className="ml-2">
+              <Button
+                onClick={logout}
+                variant={"outline"}
+                size={"sm"}
+                className="ml-2"
+              >
                 cerrar sesion
               </Button>
             )}
