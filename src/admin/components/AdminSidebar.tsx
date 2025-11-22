@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { Link, useLocation } from "react-router";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -20,6 +21,7 @@ interface SidebarProps {
 }
 
 const AdminSidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
+  const { user } = useAuthStore();
   const { pathname } = useLocation();
   const menuItems = [
     { icon: Home, label: "Dashboard", to: "/admin" },
@@ -40,6 +42,17 @@ const AdminSidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
 
     return pathname === to;
   };
+
+  const nameAbbreviation = user?.fullName
+    .split(" ")
+    .slice(0, 2)
+    .map((n) => n.slice(0, 1));
+  console.log("name", nameAbbreviation);
+
+  // en este caso si queres sacar  los dos primeras iniciale del nombre
+  //podes usar substring methods y le pasas indice ejem substring(0,2)
+  //pero eso hara que las extraiga solo del primer nombre en mi caso extraemos una
+  //de la primera palbra y otra de la segunda solo las dos primeras palabras lo unico desente que se me ocurrio jaj
 
   return (
     <div
@@ -89,13 +102,13 @@ const AdminSidebar: React.FC<SidebarProps> = ({ isCollapsed, onToggle }) => {
         <div className="p-4 border-t border-gray-200">
           <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-              JD
+              {nameAbbreviation}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                John Doe
+                {user?.fullName}
               </p>
-              <p className="text-xs text-gray-500 truncate">john@company.com</p>
+              <p className="text-xs text-gray-500 truncate">{user?.email}</p>
             </div>
           </div>
         </div>
