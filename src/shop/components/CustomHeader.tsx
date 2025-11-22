@@ -5,7 +5,9 @@ import { useRef } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import { cn } from "@/lib/utils";
 import CustomLogo from "@/components/custom/CustomLogo";
+import { useAuthStore } from "@/auth/store/auth.store";
 const CustomHeader = () => {
+  const { user } = useAuthStore();
   const [searchParams, setSearchParams] = useSearchParams();
   //saber en que ruta estamos
   //use params segmentos de rutas que vienen ibligatorios
@@ -101,11 +103,18 @@ const CustomHeader = () => {
               )}
             </Button> */}
 
-            <Link to={"/auth/login"}>
-              <Button variant={"default"} size={"sm"} className="ml-2">
-                Login
+            {!user ? (
+              <Link to={"/auth/login"}>
+                <Button variant={"default"} size={"sm"} className="ml-2">
+                  Login
+                </Button>
+              </Link>
+            ) : (
+              <Button variant={"outline"} size={"sm"} className="ml-2">
+                cerrar sesion
               </Button>
-            </Link>
+            )}
+
             <Link to={"/admin"}>
               <Button variant={"destructive"} size={"sm"} className="ml-2">
                 Admin
