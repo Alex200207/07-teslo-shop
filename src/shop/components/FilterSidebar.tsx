@@ -23,7 +23,12 @@ const FilterSidebar = () => {
 
     //establecerlo en el url
     searchParams.set("page", "1"); //regresa la pagina a la pagina 1
-    searchParams.set("sizes", newSizes.join(","));
+    if (newSizes.length === 0) {
+      searchParams.delete("sizes");
+    } else {
+      searchParams.set("sizes", newSizes.join(","));
+    }
+
     setSearchParams(searchParams);
   };
   const sizes = [

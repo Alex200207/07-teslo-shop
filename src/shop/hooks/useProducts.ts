@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from "react-router";
 
 const useProducts = () => {
   //obtener  parametros obligatorios de la url
-  const params = useParams();
+  const { gender } = useParams();
 
   //logica de manejo de cambio de pagina
   //extraer objeto del searchParams
@@ -14,9 +14,6 @@ const useProducts = () => {
   const page = searchParams.get("page") || 1;
   const sizes = searchParams.get("sizes") || undefined;
   //extrae el gender de los parametros
-  const gender = params.gender;
-
-
 
   // calcular el offset
   const offset = (Number(page) - 1) * Number(limit);
