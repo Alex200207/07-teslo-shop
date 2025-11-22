@@ -5,12 +5,15 @@ import { Label } from "@/components/ui/label";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { Link, useNavigate } from "react-router";
 import { useState, type FormEvent } from "react";
-import { loginAction } from "../actions/login.actions";
 import { toast } from "sonner";
+import { useAuthStore } from "../store/auth.store";
 
 export const LoginPage = () => {
   //Pieza de estado temporal para mostrar carga
   const [isPosting, setIsPosting] = useState(false);
+
+  //llamamos y tomamos del store de zustand
+  const { login } = useAuthStore();
 
   //navigate nso servira para redirecionar a una ruta
   const navigate = useNavigate();
@@ -24,21 +27,14 @@ export const LoginPage = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
+    const hasSuccess = await login(email, password);
 
-    //mandamos datos al backend
-    try {
-      const data = await loginAction(email, password);
-      //hacemso persistente la informacion en este caso el token
-      localStorage.setItem("token", data.token);
-      console.log("redireccionando al home");
-      toast.success("Login exitoso");
+    if (hasSuccess) {
       navigate("/");
-    } catch (e) {
-      console.log(e);
-      toast.error("Correo o contrasena no validos");
-      setIsPosting(false);
-      throw e;
+      return;
     }
+
+    toast.error("Correo o/y constrasena incorrectos");
     setIsPosting(false);
   };
 
