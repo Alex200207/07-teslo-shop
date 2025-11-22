@@ -4,10 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { Link, useNavigate } from "react-router";
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { loginAction } from "../actions/login.actions";
+import { toast } from "sonner";
 
 export const LoginPage = () => {
+  //Pieza de estado temporal para mostrar carga
+  const [isPosting, setIsPosting] = useState(false);
+
   //navigate nso servira para redirecionar a una ruta
   const navigate = useNavigate();
   //no usemos useState si no necesitamos renderizar algo a lo largo de la aplicacion
@@ -15,6 +19,7 @@ export const LoginPage = () => {
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     //evitar propacion por defecto
     event?.preventDefault();
+    setIsPosting(true);
     //obtener los valores del formulario
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
@@ -26,11 +31,15 @@ export const LoginPage = () => {
       //hacemso persistente la informacion en este caso el token
       localStorage.setItem("token", data.token);
       console.log("redireccionando al home");
+      toast.success("Login exitoso");
       navigate("/");
     } catch (e) {
       console.log(e);
+      toast.error("Correo o contrasena no validos");
+      setIsPosting(false);
       throw e;
     }
+    setIsPosting(false);
   };
 
   return (
@@ -67,7 +76,7 @@ export const LoginPage = () => {
                 </div>
                 <Input id="password" type="password" required name="password" />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isPosting}>
                 Login
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
