@@ -24,7 +24,10 @@ const useProducts = () => {
   let minPrice = undefined;
   let maxPrice = undefined;
 
-  // evaluando el pricio por casos
+  //extraemos query para busquedas
+  const q = searchParams.get("query") || undefined;
+
+  // evaluando el precio por casos
   switch (price) {
     case "any":
       break;
@@ -50,7 +53,7 @@ const useProducts = () => {
     //indicaa que cuando cambie hacer peticion
     queryKey: [
       "products",
-      { offset, limit, sizes, gender, minPrice, maxPrice },
+      { offset, limit, sizes, gender, minPrice, maxPrice, q },
     ],
     queryFn: () =>
       getProductsActions({
@@ -62,6 +65,7 @@ const useProducts = () => {
         gender,
         minPrice,
         maxPrice,
+        q,// query para busquedas
       }),
     staleTime: 1000 * 60 * 5, // 5 minutos cacheado
   });
