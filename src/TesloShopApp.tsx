@@ -1,17 +1,46 @@
 import { RouterProvider } from "react-router";
 import { appRouter } from "./app.router";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "sonner";
+import { checkAuthAction } from "./auth/actions/check-auth.action";
+import { type PropsWithChildren } from "react";
+import CustomFullScreenLoading from "./components/custom/CustomFullScreenLoading";
 
 const queryClient = new QueryClient();
+
+//custom provider
+const CheckAuthProvider = ({ children }: PropsWithChildren) => {
+  //peticion http con tankstack react query
+  // traer informacion del usuario authenticado y almacenar en zustand
+  const { isLoading } = useQuery({
+    queryKey: ["auth"],
+    queryFn: checkAuthAction,
+    retry: false, // que no siga intentando en caso de error
+  });
+
+  // mientras carga mostramos un loading
+  if (isLoading) {
+    return <CustomFullScreenLoading />;
+  }
+
+  return children;
+};
+//pxq hacemos asi esto pues porque el query client provider debe estar en la raiz de la app
+// asi cuando rederize verficamos estado de la autenticacion
 
 const TesloShopApp = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <Toaster />
-        <RouterProvider router={appRouter} />
+        <CheckAuthProvider>
+          <RouterProvider router={appRouter} />
+        </CheckAuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </>
