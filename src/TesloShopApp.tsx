@@ -7,20 +7,25 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "sonner";
-import { checkAuthAction } from "./auth/actions/check-auth.action";
 import { type PropsWithChildren } from "react";
 import CustomFullScreenLoading from "./components/custom/CustomFullScreenLoading";
+import { useAuthStore } from "./auth/store/auth.store";
 
 const queryClient = new QueryClient();
 
 //custom provider
 const CheckAuthProvider = ({ children }: PropsWithChildren) => {
+  //obtenemos la accion de verificar estado de autenticacion
+  const { checkAuthStatus } = useAuthStore();
+
   //peticion http con tankstack react query
   // traer informacion del usuario authenticado y almacenar en zustand
   const { isLoading } = useQuery({
     queryKey: ["auth"],
-    queryFn: checkAuthAction,
+    queryFn: checkAuthStatus,
     retry: false, // que no siga intentando en caso de error
+    refetchInterval: 1000 * 60 * 60 * 1.5, // refrescar cada hora y media
+    refetchOnWindowFocus: true, // cada vez que la ventana recupere el foco
   });
 
   // mientras carga mostramos un loading

@@ -1,6 +1,7 @@
 import type { User } from "@/interfaces/user.interface";
 import { create } from "zustand";
 import { loginAction } from "../actions/login.actions";
+import { checkAuthAction } from "../actions/check-auth.action";
 
 type AuthStatus = "authenticated" | "not-authenticated" | "checking";
 
@@ -15,12 +16,15 @@ type AuthState = {
   //Acciones
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  // agregar accion para verificar estado de autenticacion
+  checkAuthStatus: () => Promise<boolean>;
 };
 
-const initialState: Omit<AuthState, "login" | "logout"> = {
+const initialState: Omit<AuthState, "login" | "logout" | "checkAuthStatus"> = {
   user: null,
   token: null,
   authStatus: "checking",
+
 };
 
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -49,5 +53,31 @@ export const useAuthStore = create<AuthState>()((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     set({ user: null, token: null, authStatus: "not-authenticated" });
+  },
+
+  checkAuthStatus: async () => {
+    try {
+      // si todo sale bien obetenemos usuario y token
+      const { user, token } = await checkAuthAction();
+
+      // pasamos a estado autenticado
+      set({
+        user,
+        token,
+        authStatus: "authenticated",
+      });
+
+      return true;
+    } catch (e) {
+      // si sale mal pasamos a no autenticado
+      localStorage.removeItem("token");
+      set({
+        user: null,
+        token: null,
+        authStatus: "not-authenticated",
+      })
+      console.log(e);
+      return false;
+    }
   },
 }));
