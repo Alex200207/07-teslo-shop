@@ -55,6 +55,7 @@ export const LoginPage = () => {
                 <Input
                   id="email"
                   name="email"
+                  defaultValue={"test1@google.com"}
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -70,7 +71,14 @@ export const LoginPage = () => {
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required name="password" />
+                <Input
+                  id="password"
+                  defaultValue={"Abc123"}
+                  type="password"
+                  placeholder="constrasena"
+                  required
+                  name="password"
+                />
               </div>
               <Button type="submit" className="w-full" disabled={isPosting}>
                 Login

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import CustomLogo from "@/components/custom/CustomLogo";
 import { useAuthStore } from "@/auth/store/auth.store";
 const CustomHeader = () => {
-  const { user, logout } = useAuthStore();
+  const { authStatus, isAdmin, logout } = useAuthStore();
   const [searchParams, setSearchParams] = useSearchParams();
   //saber en que ruta estamos
   //use params segmentos de rutas que vienen ibligatorios
@@ -103,7 +103,7 @@ const CustomHeader = () => {
               )}
             </Button> */}
 
-            {!user ? (
+            {authStatus === "not-authenticated" ? (
               <Link to={"/auth/login"}>
                 <Button variant={"default"} size={"sm"} className="ml-2">
                   Login
@@ -120,11 +120,13 @@ const CustomHeader = () => {
               </Button>
             )}
 
-            <Link to={"/admin"}>
-              <Button variant={"destructive"} size={"sm"} className="ml-2">
-                Admin
-              </Button>
-            </Link>
+            {isAdmin() && (
+              <Link to={"/admin"}>
+                <Button variant={"destructive"} size={"sm"} className="ml-2">
+                  Admin
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
