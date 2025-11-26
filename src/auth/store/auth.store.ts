@@ -12,6 +12,8 @@ type AuthState = {
   authStatus: AuthStatus;
 
   //Getters
+  //forma recomendad en ves de propiedades computadas
+  isAdmin: () => boolean;
 
   //Acciones
   login: (email: string, password: string) => Promise<boolean>;
@@ -20,14 +22,16 @@ type AuthState = {
   checkAuthStatus: () => Promise<boolean>;
 };
 
-const initialState: Omit<AuthState, "login" | "logout" | "checkAuthStatus"> = {
+const initialState: Omit<
+  AuthState,
+  "login" | "logout" | "checkAuthStatus" | "isAdmin"
+> = {
   user: null,
   token: null,
   authStatus: "checking",
-
 };
 
-export const useAuthStore = create<AuthState>()((set) => ({
+export const useAuthStore = create<AuthState>()((set, get) => ({
   //implementacion del store
   ...initialState,
 
@@ -75,9 +79,16 @@ export const useAuthStore = create<AuthState>()((set) => ({
         user: null,
         token: null,
         authStatus: "not-authenticated",
-      })
+      });
       console.log(e);
       return false;
     }
+  },
+
+  isAdmin: () => {
+    // extraer roles del usuario del estado
+    const roles = get().user?.roles || [];
+    // verificar si los roles incluyen 'admin'
+    return roles.includes("admin");
   },
 }));
