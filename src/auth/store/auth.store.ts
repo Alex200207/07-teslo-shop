@@ -2,6 +2,7 @@ import type { User } from "@/interfaces/user.interface";
 import { create } from "zustand";
 import { loginAction } from "../actions/login.actions";
 import { checkAuthAction } from "../actions/check-auth.action";
+import { registerAction } from "../actions/register.actions";
 
 type AuthStatus = "authenticated" | "not-authenticated" | "checking";
 
@@ -17,6 +18,11 @@ type AuthState = {
 
   //Acciones
   login: (email: string, password: string) => Promise<boolean>;
+  register: (
+    email: string,
+    password: string,
+    fullName: string
+  ) => Promise<boolean>;
   logout: () => void;
   // agregar accion para verificar estado de autenticacion
   checkAuthStatus: () => Promise<boolean>;
@@ -24,7 +30,7 @@ type AuthState = {
 
 const initialState: Omit<
   AuthState,
-  "login" | "logout" | "checkAuthStatus" | "isAdmin"
+  "login" | "register" | "logout" | "checkAuthStatus" | "isAdmin"
 > = {
   user: null,
   token: null,
@@ -49,6 +55,31 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       localStorage.removeItem("token");
       //si sale mal manda null
       set({ user: null, token: null, authStatus: "not-authenticated" });
+      return false;
+    }
+  },
+
+  // register
+
+  register: async (email: string, password: string, fullName: string) => {
+    try {
+      const data = await registerAction(email, password, fullName);
+      localStorage.setItem("token", data.token);
+      set({
+        user: data.user,
+        token: data.token,
+        authStatus: "authenticated",
+      });
+
+      return true;
+    } catch (e) {
+      console.log(e);
+      localStorage.removeItem("token");
+      set({
+        user: null,
+        token: null,
+        authStatus: "not-authenticated",
+      });
       return false;
     }
   },

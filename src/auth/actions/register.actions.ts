@@ -3,14 +3,14 @@ import type { AuthResponse } from "../interfaces/auth.response";
 
 export const registerAction = async (
   email: string,
-  fullName: string,
-  password: string
+  password: string,
+  fullName: string
 ): Promise<AuthResponse> => {
   try {
     const { data } = await tesloApi.post<AuthResponse>("/auth/register", {
       email,
-      fullName,
       password,
+      fullName,
     });
     return data;
   } catch (er) {
