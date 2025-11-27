@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { Button } from "@/components/ui/button";
-import { Pencil, PencilIcon, PlusIcon } from "lucide-react";
+import {  PencilIcon, PlusIcon } from "lucide-react";
 import useProducts from "@/shop/hooks/useProducts";
 import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 import { currencyFormatter } from "@/lib/currency-formatter";
