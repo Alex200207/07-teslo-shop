@@ -1,12 +1,14 @@
 // https://github.com/Klerith/bolt-product-editor
 
-import { useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 
 import { useState } from "react";
 import { X, Plus, Upload, Tag, SaveAll } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
 import AdminTtile from "../components/AdminTtile";
+import useProduct from "../hooks/useProduct";
+import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 
 interface Product {
   id: string;
@@ -24,6 +26,10 @@ interface Product {
 export const AdminProductPage = () => {
   const { id } = useParams();
 
+  //trae los datos del producto si no es nuevo
+  const { isLoading, isError, data: product2 } = useProduct(id || "");
+
+  console.log({ isLoading, product2 });
   const productTitle = id === "new" ? "Nuevo producto" : "Editar producto";
   const productSubtitle =
     id === "new"
@@ -53,6 +59,16 @@ export const AdminProductPage = () => {
   const [dragActive, setDragActive] = useState(false);
 
   const availableSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+
+  // redireccion
+  if (isError) {
+    return <Navigate to={"/admin/products"} replace />;
+  }
+
+  //maneja loading
+  if (isLoading) {
+    return <CustomFullScreenLoading />;
+  }
 
   const handleInputChange = (field: keyof Product, value: string | number) => {
     setProduct((prev) => ({ ...prev, [field]: value }));

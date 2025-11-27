@@ -22,7 +22,7 @@ export const getproductByIdAction = async (id: string): Promise<Product> => {
   }
 
   // caso : Si tenemos entonces una idhacemos fetch al producto
-  const { data } = await tesloApi.get<Product>(`/admin/products/${id}`);
+  const { data } = await tesloApi.get<Product>(`/products/${id}`);
   // transformar las imagenes debido al formato del backend
   const images = data.images.map((image) => {
     // si la imagen ya es una url completa la retornas tal cual
