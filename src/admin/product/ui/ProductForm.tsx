@@ -134,10 +134,12 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     className={
                       // cn es una funcion que nos permite concatenar clases condicionalmente
                       cn(
-                      "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200", {
-                        "border-red-500": errors.title,// mostrar borde rojo si hay error en el campo title
-                      }
-                    )}
+                        "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                        {
+                          "border-red-500": errors.title, // mostrar borde rojo si hay error en el campo title
+                        }
+                      )
+                    }
                     placeholder="Título del producto"
                   />
 
@@ -153,10 +155,26 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     </label>
                     <input
                       type="number"
-                      {...register("price")}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      {...register("price", {
+                        required: true,
+                        min: 0,
+                      })}
+                      className={
+                        // cn es una funcion que nos permite concatenar clases condicionalmente
+                        cn(
+                          "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                          {
+                            "border-red-500": errors.price, // mostrar borde rojo si hay error en el campo title
+                          }
+                        )
+                      }
                       placeholder="Precio del producto"
                     />
+                    {errors.price && (
+                      <p className="text-red-500">
+                        El Precio es obligatorio y mayor a 0
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -165,10 +183,26 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     </label>
                     <input
                       type="number"
-                      {...register("stock")}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      {...register("stock", {
+                        required: true,
+                        min: 1,
+                      })}
+                      className={
+                        // cn es una funcion que nos permite concatenar clases condicionalmente
+                        cn(
+                          "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                          {
+                            "border-red-500": errors.stock, // mostrar borde rojo si hay error en el campo title
+                          }
+                        )
+                      }
                       placeholder="Stock del producto"
                     />
+                    {errors.stock && (
+                      <p className="text-red-500">
+                        El Stock es obligatorio y no puede ser negativo
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -178,10 +212,34 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                   </label>
                   <input
                     type="text"
-                    {...register("slug")}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    {...register("slug", {
+                      required: true,
+                      //permite una funcion personalizada
+                      //si hay algun espacio  en el valor y si lo hay ponemos error personalizado
+                      validate: (val) =>
+                        !/\s/.test(val) ||
+                        "El slug no puede contener espacios en blanco", // no permite espacios en blanco
+                    })}
+                    className={
+                      // cn es una funcion que nos permite concatenar clases condicionalmente
+                      cn(
+                        "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                        {
+                          "border-red-500": errors.slug, // mostrar borde rojo si hay error en el campo title
+                        }
+                      )
+                    }
                     placeholder="Slug del producto"
                   />
+                  {errors.slug && (
+                    <p className="text-red-500">
+                      {
+                        //mostrar mensaje personalizado si hay error y si no mostramos mensaje por defecto
+                        (errors.slug.message as string) ||
+                          "El slug es obligatorio"
+                      }
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -204,11 +262,26 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     Descripción del producto
                   </label>
                   <textarea
-                    {...register("description")}
+                    {...register("description", {
+                      required: true,
+                    })}
+                    className={
+                      // cn es una funcion que nos permite concatenar clases condicionalmente
+                      cn(
+                        "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                        {
+                          "border-red-500": errors.description, // mostrar borde rojo si hay error en el campo title
+                        }
+                      )
+                    }
                     rows={5}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                     placeholder="Descripción del producto"
                   />
+                  {errors.description && (
+                    <p className="text-red-500">
+                      La descripción es obligatoria
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
