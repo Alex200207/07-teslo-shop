@@ -3,17 +3,25 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/interfaces/product.interface";
 import { Link, Plus, SaveAll, Tag, Upload, X } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface Props {
   title: string;
   subTitle: string;
   product: Product;
 }
-const availableSizes = ["XXS", "XS", "S", "M", "L", "XL", "XXL"];
+const availableSizes = [ "XS", "S", "M", "L", "XL", "XXL"];
 
 export const ProductForm = ({ title, subTitle, product }: Props) => {
   const [dragActive, setDragActive] = useState(false);
-  
+
+  // desestructuramos useForm para manejar el formulario
+  // use form es un hook de react-hook-form que nos permite manejar formularios de manera sencilla
+  //register nos permite registrar los campos del formulario
+  const { register } = useForm({
+    defaultValues: product,
+  });
+
   const addTag = () => {
     // if (newTag.trim() && !product.tags.includes(newTag.trim())) {
     //   setProduct((prev) => ({
@@ -21,8 +29,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
     //     tags: [...prev.tags, newTag.trim()],
     //   }));
     //   setNewTag("");
-    }
-  
+  };
 
   const removeTag = (tagToRemove: string) => {
     // setProduct((prev) => ({
@@ -106,8 +113,9 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                   </label>
                   <input
                     type="text"
-                    // value={product.title}
-                    // onChange={(e) => handleInputChange("title", e.target.value)}
+                    // spread de todo lo del register para el campo title
+                    // el sentido hacerle spread es exparsir todas esas propiedades que tiene como el onChange, onBlur, name, ref
+                    {...register("title")}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Título del producto"
                   />
@@ -120,10 +128,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     </label>
                     <input
                       type="number"
-                      value={product.price}
-                      //   onChange={(e) =>
-                      //     handleInputChange("price", parseFloat(e.target.value))
-                      //   }
+                      {...register("price")}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                       placeholder="Precio del producto"
                     />
@@ -135,10 +140,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     </label>
                     <input
                       type="number"
-                      //   value={product.stock}
-                      //   onChange={(e) =>
-                      //     handleInputChange("stock", parseInt(e.target.value))
-                      //   }
+                      {...register("stock")}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                       placeholder="Stock del producto"
                     />
@@ -151,8 +153,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                   </label>
                   <input
                     type="text"
-                    // value={product.slug}
-                    // onChange={(e) => handleInputChange("slug", e.target.value)}
+                    {...register("slug")}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Slug del producto"
                   />
@@ -163,10 +164,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     Género del producto
                   </label>
                   <select
-                    // value={product.gender}
-                    // onChange={(e) =>
-                    //   handleInputChange("gender", e.target.value)
-                    // }
+                    {...register("gender")}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   >
                     <option value="men">Hombre</option>
@@ -181,10 +179,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     Descripción del producto
                   </label>
                   <textarea
-                    // value={product.description}
-                    // onChange={(e) =>
-                    //   handleInputChange("description", e.target.value)
-                    // }
+                    {...register("description")}
                     rows={5}
                     className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                     placeholder="Descripción del producto"
