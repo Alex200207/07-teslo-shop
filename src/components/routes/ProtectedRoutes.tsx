@@ -15,16 +15,17 @@ export const AuthenticatedRoute = ({ children }: PropsWithChildren) => {
   return children;
 };
 
-export const NotAuthenticatedRoute = () => {
+export const NotAuthenticatedRoute = ({ children }: PropsWithChildren) => {
   // extraemos el estado de autenticación
   const { authStatus } = useAuthStore();
   // si el estado de autenciacion es checking no renderizamos nada
   if (authStatus === "checking") return null;
   // verficas si el auth estatus es igual a authenticated y redirigimos al home
   if (authStatus === "authenticated") return <Navigate to="/" replace />;
+  return children;
 };
 
-export const AdminRoutes = () => {
+export const AdminRoutes = ({ children }: PropsWithChildren) => {
   // extraemos el estado de autenticación y el isAdmin
   const { authStatus, isAdmin } = useAuthStore();
   // si el estado de autenciacion es checking no renderizamos nada
@@ -36,4 +37,5 @@ export const AdminRoutes = () => {
 
   // verificamos si el usuario no es admin y redirigimos al home
   if (!isAdmin()) return <Navigate to="/" replace />;
+  return children;
 };
