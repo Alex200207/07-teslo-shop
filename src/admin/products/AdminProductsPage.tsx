@@ -10,9 +10,17 @@ import {
 } from "@/components/ui/table";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
+import { Pencil, PencilIcon, PlusIcon } from "lucide-react";
+import useProducts from "@/shop/hooks/useProducts";
+import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
+import { currencyFormatter } from "@/lib/currency-formatter";
 
 const AdminProductPage = () => {
+  const { data, isLoading } = useProducts();
+
+  const products = data?.products || [];
+
+  if (isLoading) return <CustomFullScreenLoading />;
   return (
     <>
       <div className="flex justify-between items-center">
@@ -44,28 +52,37 @@ const AdminProductPage = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">1</TableCell>
-            <TableCell>
-              <img
-                src="https://placehold.co/250x250"
-                alt="Product"
-                className="w-20 h-20 object-cover rounded-md"
-              />
-            </TableCell>
-            <TableCell>Producto 1</TableCell>
-            <TableCell>$250.00</TableCell>
-            <TableCell>Categoria 1</TableCell>
-            <TableCell>100 stock</TableCell>
-            <TableCell>XS,S,L</TableCell>
-            <TableCell>
-              <Link to={`/admin/products/t-shirt-teslo`}> Editar</Link>
-            </TableCell>
-          </TableRow>
+          {products.map((p) => (
+            <TableRow>
+              <TableCell className="font-medium">1</TableCell>
+              <TableCell>
+                <img
+                  src={p.images[0]}
+                  alt={p.title}
+                  className="w-20 h-20 object-cover rounded-md"
+                />
+              </TableCell>
+              <Link
+                className="hover:text-blue-500 underline"
+                to={`/admin/products/${p.id}`}
+              >
+                {p.title}
+              </Link>
+              <TableCell>{currencyFormatter(p.price)}</TableCell>
+              <TableCell>{p.gender}</TableCell>
+              <TableCell>{p.stock} stock</TableCell>
+              <TableCell>{p.sizes}</TableCell>
+              <TableCell>
+                <Link to={`/admin/products/${p.id}`}>
+                  <PencilIcon className="w-4 h-4 text-blue-500" />
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
 
-      <CustomPagination totalPages={10} />
+      <CustomPagination totalPages={data?.pages || 0} />
     </>
   );
 };
