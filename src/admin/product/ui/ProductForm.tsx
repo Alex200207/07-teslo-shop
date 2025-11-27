@@ -1,7 +1,9 @@
 import AdminTtile from "@/admin/components/AdminTtile";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/interfaces/product.interface";
+import { cn } from "@/lib/utils";
 import { Link, Plus, SaveAll, Tag, Upload, X } from "lucide-react";
+import { p } from "node_modules/react-router/dist/development/index-react-server-client-2EDmGlsZ.d.mts";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,7 +12,7 @@ interface Props {
   subTitle: string;
   product: Product;
 }
-const availableSizes = [ "XS", "S", "M", "L", "XL", "XXL"];
+const availableSizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 export const ProductForm = ({ title, subTitle, product }: Props) => {
   const [dragActive, setDragActive] = useState(false);
@@ -18,7 +20,11 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   // desestructuramos useForm para manejar el formulario
   // use form es un hook de react-hook-form que nos permite manejar formularios de manera sencilla
   //register nos permite registrar los campos del formulario
-  const { register } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }, // nos permite manejar los errores del formulario y podemos extraer mas propiedades si es necesario
+  } = useForm({
     defaultValues: product,
   });
 
@@ -77,8 +83,14 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
     console.log(files);
   };
 
+  //Todo : remover luego
+
+  const onSubmit = (productLike: Product) => {
+    console.log("onSubmit", productLike);
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex justify-between items-center">
         <AdminTtile title={title} subtitle={subTitle} />
         <div className="flex justify-end mb-10 gap-4">
@@ -115,10 +127,23 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     type="text"
                     // spread de todo lo del register para el campo title
                     // el sentido hacerle spread es exparsir todas esas propiedades que tiene como el onChange, onBlur, name, ref
-                    {...register("title")}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    {...register("title", {
+                      //propiedas para controlar el campo
+                      required: true,
+                    })}
+                    className={
+                      // cn es una funcion que nos permite concatenar clases condicionalmente
+                      cn(
+                      "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200", {
+                        "border-red-500": errors.title,// mostrar borde rojo si hay error en el campo title
+                      }
+                    )}
                     placeholder="Título del producto"
                   />
+
+                  {errors.title && (
+                    <p className="text-red-500">El título es obligatorio</p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -408,7 +433,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
           </div>
         </div>
       </div>
-    </>
+    </form>
   );
 };
 
