@@ -42,16 +42,17 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   //agregar un tag
   const addTag = () => {
     const newTag = inputRef.current!.value;
+    if (newTag.length === 0) return;
     const newTagSet = new Set(getValues("tags"));
     newTagSet.add(newTag);
     setValue("tags", Array.from(newTagSet));
+    inputRef.current!.value = "";
   };
 
   const removeTag = (tagToRemove: string) => {
-    // setProduct((prev) => ({
-    //   ...prev,
-    //   tags: prev.tags.filter((tag) => tag !== tagToRemove),
-    // }));
+    const newTagSet = new Set(getValues("tags"));
+    newTagSet.delete(tagToRemove);
+    setValue("tags", Array.from(newTagSet));
   };
 
   const addSize = (size: Size) => {
@@ -365,7 +366,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                       <Tag className="h-3 w-3 mr-1" />
                       {tag}
                       <button
-                        // onClick={() => removeTag(tag)}
+                        onClick={() => removeTag(tag)}
                         className="ml-2 text-green-600 hover:text-green-800 transition-colors duration-200"
                       >
                         <X className="h-3 w-3" />
