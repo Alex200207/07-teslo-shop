@@ -8,7 +8,12 @@ export const AdminProductPage = () => {
   const { id } = useParams();
 
   //trae los datos del producto si no es nuevo
-  const { isLoading, isError, data: product } = useProduct(id || "");
+  const {
+    isLoading,
+    isError,
+    data: product,
+    handleSubmitForm,
+  } = useProduct(id || "");
 
   console.log({ isLoading, product });
   const productTitle = id === "new" ? "Nuevo producto" : "Editar producto";
@@ -38,6 +43,7 @@ export const AdminProductPage = () => {
       title={productTitle}
       subTitle={productSubtitle}
       product={product}
+      onSubmit={handleSubmitForm}
     />
   );
 };

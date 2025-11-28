@@ -10,11 +10,14 @@ interface Props {
   title: string;
   subTitle: string;
   product: Product;
+
+  //metodos
+  onSubmit: (productLike: Partial<Product>) => Promise<void>;
 }
 const availableSizes: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 const SIZE_ORDER: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
-export const ProductForm = ({ title, subTitle, product }: Props) => {
+export const ProductForm = ({ title, subTitle, product, onSubmit }: Props) => {
   const [dragActive, setDragActive] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,6 +37,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   });
   const selectedSizes = watch("sizes"); // observar los cambios en el campo sizes
   const selectedTags = watch("tags");
+  const currentStock = watch("stock");
   const orderedSizes = [...selectedSizes].sort(
     // ordenar las tallas seleccionadas
     (a, b) => SIZE_ORDER.indexOf(a) - SIZE_ORDER.indexOf(b)
@@ -91,12 +95,6 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     console.log(files);
-  };
-
-  //Todo : remover luego
-
-  const onSubmit = (productLike: Product) => {
-    console.log("onSubmit", productLike);
   };
 
   return (
@@ -493,16 +491,16 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                   </span>
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      product.stock > 5
+                      currentStock > 5
                         ? "bg-green-100 text-green-800"
-                        : product.stock > 0
+                        : currentStock > 0
                         ? "bg-yellow-100 text-yellow-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {product.stock > 5
+                    {currentStock > 5
                       ? "En stock"
-                      : product.stock > 0
+                      : currentStock > 0
                       ? "Bajo stock"
                       : "Sin stock"}
                   </span>
@@ -522,7 +520,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                     Tallas disponibles
                   </span>
                   <span className="text-sm text-slate-600">
-                    {product.sizes.length} tallas
+                    {selectedSizes.length} tallas
                   </span>
                 </div>
               </div>

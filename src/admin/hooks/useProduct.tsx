@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getproductByIdAction } from "../actions/get-products-by-id.actions";
+import type { Product } from "@/interfaces/product.interface";
 
 const useProduct = (id: string) => {
   const query = useQuery({
@@ -9,7 +10,15 @@ const useProduct = (id: string) => {
     staleTime: 1000 * 60 * 5, //5 minutos de cache
     enabled: !!id, //solo se ejecuta si hay id
   });
-  return { ...query };
+
+  //Todo: Mutacion
+  // useMutation para crear o actualizar producto viene de react query
+  // const mutation = useMutation()
+
+  const handleSubmitForm = async (productLike: Partial<Product>) => {
+    console.log({ productLike });
+  };
+  return { ...query, handleSubmitForm };
 };
 
 export default useProduct;
