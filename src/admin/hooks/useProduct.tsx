@@ -1,8 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getproductByIdAction } from "../actions/get-products-by-id.actions";
 import { createUpdateProductAction } from "../actions/create-update-product.action";
+import type { Product } from "@/interfaces/product.interface";
 
 const useProduct = (id: string) => {
+  // query client para manejar la cache
+  const queryClient = useQueryClient();
   const query = useQuery({
     queryKey: ["product", id], //indicaa que cuando cambie hacer peticion
     queryFn: () => getproductByIdAction(id), //llama a la accion que hace la peticion
@@ -14,9 +17,14 @@ const useProduct = (id: string) => {
   //Todo: Mutacion
   // useMutation para crear o actualizar producto viene de react query
   const mutation = useMutation({
-    mutationFn: createUpdateProductAction,// la funcion que hace la mutacion
-    onSuccess: (data) => {// cuando se crea o actualiza el producto
+    mutationFn: createUpdateProductAction, // la funcion que hace la mutacion
+    onSuccess: (data: Product) => {
+      // cuando se crea o actualiza el producto
+      queryClient.invalidateQueries({ queryKey: ["products"] }); // invalidamos la cache de los productos para que se actualice
+      queryClient.invalidateQueries({ queryKey: ["product", {id:data.id}] });
       console.log("Producto creado/actualizado", data);
+      //ahorro para no tener que volver a hacer fetch y ver el producto actualizado
+      queryClient.setQueryData(["products", data.id], data); // actualizamos la cache del producto creado/actualizado
     },
   });
 

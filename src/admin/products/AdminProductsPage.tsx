@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { CustomPagination } from "@/components/custom/CustomPagination";
 import { Button } from "@/components/ui/button";
-import {  PencilIcon, PlusIcon } from "lucide-react";
+import { PencilIcon, PlusIcon } from "lucide-react";
 import useProducts from "@/shop/hooks/useProducts";
 import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 import { currencyFormatter } from "@/lib/currency-formatter";
@@ -53,7 +53,7 @@ const AdminProductPage = () => {
         </TableHeader>
         <TableBody>
           {products.map((p) => (
-            <TableRow>
+            <TableRow key={p.id}>
               <TableCell className="font-medium">1</TableCell>
               <TableCell>
                 <img

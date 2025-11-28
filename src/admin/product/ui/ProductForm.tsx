@@ -1,5 +1,4 @@
 import AdminTtile from "@/admin/components/AdminTtile";
-import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 import { Button } from "@/components/ui/button";
 import type { Product, Size } from "@/interfaces/product.interface";
 import { cn } from "@/lib/utils";
