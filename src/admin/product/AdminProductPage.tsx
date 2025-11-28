@@ -1,19 +1,17 @@
-import { Navigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import useProduct from "../hooks/useProduct";
 import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 import ProductForm from "./ui/ProductForm";
+import type { Product } from "@/interfaces/product.interface";
+import { toast } from "sonner";
 
 export const AdminProductPage = () => {
+  const navigate = useNavigate();
   // con useparams podes obtener parametros de la url
   const { id } = useParams();
 
   //trae los datos del producto si no es nuevo
-  const {
-    isLoading,
-    isError,
-    data: product,
-    handleSubmitForm,
-  } = useProduct(id || "");
+  const { isLoading, isError, data: product, mutation } = useProduct(id || "");
 
   console.log({ isLoading, product });
   const productTitle = id === "new" ? "Nuevo producto" : "Editar producto";
@@ -21,6 +19,29 @@ export const AdminProductPage = () => {
     id === "new"
       ? "Aquí puedes crear un nuevo producto."
       : "Aquí puedes editar el producto.";
+
+  // manejar el submit del formulario
+  const handleSubmit = async (productLike: Partial<Product>) => {
+    // llama a la mutacion
+    await mutation.mutateAsync(productLike, {
+      // cuando se crea o actualiza el producto
+      onSuccess: (data) => {
+        // mostrar toast
+        toast.success(
+          `Producto ${id === "new" ? "creado" : "actualizado"} correctamente`,
+          { position: "top-center" }
+        );
+        //mandas al usuario despues de crerar o actualizar
+        navigate(`/admin/products/${data.id}`);
+      },
+      onError: (error) => {
+        console.log({ error });
+        toast.error("Error al crear/actualizar el producto", {
+          position: "top-center",
+        });
+      },
+    });
+  };
 
   // redireccion
   if (isError) {
@@ -43,7 +64,7 @@ export const AdminProductPage = () => {
       title={productTitle}
       subTitle={productSubtitle}
       product={product}
-      onSubmit={handleSubmitForm}
+      onSubmit={handleSubmit}
     />
   );
 };
