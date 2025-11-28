@@ -333,7 +333,7 @@ export const ProductForm = ({ title, subTitle, product }: Props) => {
                       onClick={() => addSize(size)}
                       disabled={getValues("sizes").includes(size)}
                       className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
-                        product.sizes.includes(size)
+                        selectedSizes.includes(size)
                           ? "bg-slate-100 text-slate-400 cursor-not-allowed"
                           : "bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
                       }`}
