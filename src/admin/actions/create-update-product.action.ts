@@ -1,11 +1,15 @@
 import { tesloApi } from "@/api/tesloApi";
 import type { Product } from "@/interfaces/product.interface";
+import { sleep } from "@/lib/sleep";
 
 // product espera un Partial<Product> porque puede ser nuevo o una actualizacion
 //pero te va regresar un Product completo
 export const createUpdateProductAction = async (
   productLike: Partial<Product>
 ): Promise<Product> => {
+  // simular retardo de red //Todo: quitar luego
+  await sleep(1500);
+
   // extramos id, user, images del productLike
   // el resto de campos los ponemos en rest usando el operador spread
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -1,8 +1,9 @@
 import AdminTtile from "@/admin/components/AdminTtile";
+import CustomFullScreenLoading from "@/components/custom/CustomFullScreenLoading";
 import { Button } from "@/components/ui/button";
 import type { Product, Size } from "@/interfaces/product.interface";
 import { cn } from "@/lib/utils";
-import { Link, Plus, SaveAll, Tag, Upload, X } from "lucide-react";
+import { Link, LoaderIcon, Plus, SaveAll, Tag, Upload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -10,6 +11,7 @@ interface Props {
   title: string;
   subTitle: string;
   product: Product;
+  isPending: boolean;
 
   //metodos
   onSubmit: (productLike: Partial<Product>) => Promise<void>;
@@ -17,7 +19,13 @@ interface Props {
 const availableSizes: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 const SIZE_ORDER: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
-export const ProductForm = ({ title, subTitle, product, onSubmit }: Props) => {
+export const ProductForm = ({
+  title,
+  subTitle,
+  product,
+  onSubmit,
+  isPending,
+}: Props) => {
   const [dragActive, setDragActive] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -109,8 +117,16 @@ export const ProductForm = ({ title, subTitle, product, onSubmit }: Props) => {
             </Link>
           </Button>
 
-          <Button>
-            <SaveAll className="w-4 h-4" />
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="flex items-center gap-2"
+          >
+            {isPending ? (
+              <LoaderIcon className="w-4 h-4 animate-spin" />
+            ) : (
+              <SaveAll className="w-4 h-4" />
+            )}
             Guardar cambios
           </Button>
         </div>

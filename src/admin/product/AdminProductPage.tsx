@@ -12,6 +12,7 @@ export const AdminProductPage = () => {
 
   //trae los datos del producto si no es nuevo
   const { isLoading, isError, data: product, mutation } = useProduct(id || "");
+  const isPendign = mutation.isPending;
 
   console.log({ isLoading, product });
   const productTitle = id === "new" ? "Nuevo producto" : "Editar producto";
@@ -65,6 +66,7 @@ export const AdminProductPage = () => {
       subTitle={productSubtitle}
       product={product}
       onSubmit={handleSubmit}
+      isPending={isPendign}
     />
   );
 };
