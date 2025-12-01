@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createHashRouter, Navigate } from "react-router";
 import ShopLayout from "./shop/layout/ShopLayout";
 import HomePage from "./pages/home/HomePage";
 import ProductPage from "./pages/product/ProductPage";
@@ -16,8 +16,10 @@ import {
 
 const AuthLayout = lazy(() => import("./auth/layout/AuthLayout"));
 const AdminLayout = lazy(() => import("./admin/layout/AdminLayout"));
-
-export const appRouter = createBrowserRouter([
+export const appRouter = createHashRouter([
+  // debido a q netlify no soporta bien el browser router se usa hash router
+  //pero se recomienda buscar otra alternativa para produccion
+  // export const appRouter = createBrowserRouter([
   // public
   {
     path: "/",
