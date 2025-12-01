@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import type { Product, Size } from "@/interfaces/product.interface";
 import { cn } from "@/lib/utils";
 import { Link, LoaderIcon, Plus, SaveAll, Tag, Upload, X } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface Props {
@@ -13,10 +13,18 @@ interface Props {
   isPending: boolean;
 
   //metodos
-  onSubmit: (productLike: Partial<Product>) => Promise<void>;
+  //concatenar Partial<Product> con un array de archivos opcional
+  onSubmit: (
+    productLike: Partial<Product> & { files?: File[] }
+  ) => Promise<void>;
 }
 const availableSizes: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
 const SIZE_ORDER: Size[] = ["XS", "S", "M", "L", "XL", "XXL"];
+
+// extendemos la interfaz Product para agregar el campo files
+interface FormImputs extends Product {
+  files?: File[];
+}
 
 export const ProductForm = ({
   title,
@@ -26,6 +34,11 @@ export const ProductForm = ({
   isPending,
 }: Props) => {
   const [dragActive, setDragActive] = useState(false);
+
+  //efecto para purgar imagenes cuando se sube un nuevo producto
+  useEffect(() => {
+    setFiles([]);
+  }, [product]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   // estado para manejar los archivos seleccionados
@@ -41,7 +54,7 @@ export const ProductForm = ({
     getValues, // nos permite obtener los valores del formulario sin provocaar re render
     setValue, // nos permite establecer los valores del formulario
     watch, // nos permite observar los cambios en los valores del formulario
-  } = useForm({
+  } = useForm<FormImputs>({
     defaultValues: product,
   });
   const selectedSizes = watch("sizes"); // observar los cambios en el campo sizes
@@ -100,7 +113,10 @@ export const ProductForm = ({
     const files = e.dataTransfer.files;
     console.log(files);
     if (!files) return;
-    setFiles((prev) => [...prev, ...Array.from(files)]);
+    // Convertir FileList a Array y actualizar el estado
+    const currentFiles = getValues("files") || [];
+    // mantenemos los archivos previos y agregamos los nuevos
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +125,9 @@ export const ProductForm = ({
     // Convertir FileList a Array y actualizar el estado
     // mantenemos los archivos previos y agregamos los nuevos
     setFiles((prev) => [...prev, ...Array.from(files)]);
+    const currentFiles = getValues("files") || [];
+    // mantenemos los archivos previos y agregamos los nuevos
+    setValue("files", [...currentFiles, ...Array.from(files)]);
   };
 
   return (

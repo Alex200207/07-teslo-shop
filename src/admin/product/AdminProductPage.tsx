@@ -22,7 +22,9 @@ export const AdminProductPage = () => {
       : "Aquí puedes editar el producto.";
 
   // manejar el submit del formulario
-  const handleSubmit = async (productLike: Partial<Product>) => {
+  const handleSubmit = async (
+    productLike: Partial<Product> & { files?: File[] }
+  ) => {
     // llama a la mutacion
     await mutation.mutateAsync(productLike, {
       // cuando se crea o actualiza el producto
